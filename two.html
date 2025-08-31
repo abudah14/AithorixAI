@@ -24,6 +24,7 @@
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 800px;
         }
 
         .about-container h1 {
@@ -33,11 +34,13 @@
 
         .about-container p {
             font-size: 1.2rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            line-height: 1.8;
         }
 
         .tiktok-link {
             display: inline-block;
+            margin-top: 20px;
             padding: 12px 25px;
             color: #fff;
             border: 2px solid #fff;
@@ -51,48 +54,65 @@
             background-color: rgba(255,255,255,0.2);
             transform: scale(1.05);
         }
-    </style>
-        <style>
-.btn-secondary {
-    padding: 12px 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0); /* شفاف */
-    color: #ffffff; /* نص أبيض */
-    border: 2px solid #ffffff; /* حدود واضحة */
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
 
-.btn-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* شفاف عند المرور */
-    transform: scale(1.05); /* حركة تكبير بسيطة */
-}
-</style>
+        .disclaimer {
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: #ccc;
+            text-align: justify;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+        }
+
+        .btn-secondary {
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-    <!-- Welcome Screen -->
     <div class="welcome-screen" id="welcomeScreen">
         <div class="language-selector">
-    <button class="btn btn-secondary" onclick="window.location.href='index.html'">
-        رجوع
-    </button>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                رجوع
+            </button>
         </div>
-<body>
+    </div>
+
     <div class="about-container">
-        <h1>من انا / About</h1>
+        <h1>من أنا / About</h1>
         <p>
             أنا شخص عادي، جاتني فكرة وسويت مشروع Aithorix AI لتجربة إنشاء شخصيات ذكاء اصطناعي بطريقة سهلة وممتعة.
         </p>
         <p>
-           I’m just an ordinary person, I had an idea and created the Aithorix AI project to experiment with creating AI characters in an easy and fun way.
-     
-   <a class="tiktok-link" href="https://www.tiktok.com/@user76296493" target="_blank">
+            I’m just an ordinary person, I had an idea and created the Aithorix AI project to experiment with creating AI characters in an easy and fun way.
+        </p>
+
+        <a class="tiktok-link" href="https://www.tiktok.com/@user76296493" target="_blank">
             تابعني على تيك توك / Follow me on TikTok
         </a>
+
+        <div class="disclaimer">
+            <strong>إخلاء مسؤولية / Disclaimer:</strong><br><br>
+            هذا الموقع تم إنشاؤه كهواية وتجربة شخصية.  
+            لا يتم تحقيق أي أرباح من خلاله، والمحتوى الذي يتم إنشاؤه عبر Aithorix AI يعتمد على واجهة برمجية (API) من Google Gemini.  
+            أنا غير مسؤول عن أي استخدام غير مناسب أو مخالف للقوانين من قبل المستخدمين.  
+            <br><br>
+            This website is a personal hobby project.  
+            It is not monetized, and all generated content relies on the Google Gemini API.  
+            I am not responsible for any misuse or inappropriate use by users.
+        </div>
     </div>
 </body>
 </html>
-
-
-
