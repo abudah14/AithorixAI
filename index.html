@@ -1176,6 +1176,23 @@
             }
         }
     </style>
+    <style>
+.btn-secondary {
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0); /* شفاف */
+    color: #ffffff; /* نص أبيض */
+    border: 2px solid #ffffff; /* حدود واضحة */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* شفاف عند المرور */
+    transform: scale(1.05); /* حركة تكبير بسيطة */
+}
+</style>
 </head>
 <body>
     <!-- Welcome Screen -->
@@ -1183,6 +1200,9 @@
         <div class="language-selector">
             <button class="lang-btn" data-lang="ar">العربية</button>
             <button class="lang-btn" data-lang="en">English</button>
+    <button class="btn btn-secondary" onclick="window.location.href='two.html'">
+        من نحن / About Us
+    </button>
         </div>
 
         <div class="theme-toggle" id="themeToggle"></div>
@@ -2828,6 +2848,7 @@ ${persona.name}:`;
     </script>
 </body>
 </html>
+
 
 
 
