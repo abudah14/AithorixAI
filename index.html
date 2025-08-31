@@ -1193,6 +1193,21 @@
     transform: scale(1.05); /* حركة تكبير بسيطة */
 }
 </style>
+<style>
+/* حجم الزر الافتراضي على الكمبيوتر */
+.btn {
+    padding: 10px 20px; /* المسافة داخل الزر */
+    font-size: 16px;    /* حجم الخط */
+}
+
+/* Media Query للجوال */
+@media only screen and (max-width: 768px) {
+    .btn {
+        padding: 3px 8px;  /* يقلل حجم البادينغ */
+        font-size: 8px;    /* يصغر حجم الخط */
+    }
+}
+</style>
 </head>
 <body>
     <!-- Welcome Screen -->
@@ -2848,6 +2863,7 @@ ${persona.name}:`;
     </script>
 </body>
 </html>
+
 
 
 
