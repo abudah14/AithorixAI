@@ -1194,15 +1194,15 @@
 }
 </style>
 <style>
-/* حجم الزر الافتراضي على الكمبيوتر */
-.btn {
+/* حجم الزر الافتراضي */
+#aboutBtn {
     padding: 10px 20px; /* المسافة داخل الزر */
     font-size: 16px;    /* حجم الخط */
 }
 
-/* Media Query للجوال */
+/* Media Query للجوال فقط على هذا الزر */
 @media only screen and (max-width: 768px) {
-    .btn {
+    #aboutBtn {
         padding: 3px 8px;  /* يقلل حجم البادينغ */
         font-size: 8px;    /* يصغر حجم الخط */
     }
@@ -1215,9 +1215,9 @@
         <div class="language-selector">
             <button class="lang-btn" data-lang="ar">العربية</button>
             <button class="lang-btn" data-lang="en">English</button>
-    <button class="btn btn-secondary" onclick="window.location.href='two.html'">
-        من نحن / About Us
-    </button>
+<button id="aboutBtn" class="btn btn-secondary" onclick="window.location.href='two.html'">
+    من نحن / About Us
+</button>
         </div>
 
         <div class="theme-toggle" id="themeToggle"></div>
@@ -2863,6 +2863,7 @@ ${persona.name}:`;
     </script>
 </body>
 </html>
+
 
 
 
