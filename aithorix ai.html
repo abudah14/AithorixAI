@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa - AI Personas Hub</title>
+    <style>
+        :root {
+            /* Enhanced Theme System */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --bg-quaternary: #e2e8f0;
+            --bg-card: #ffffff;
+            --bg-hover: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-primary: #e2e8f0;
+            --border-secondary: #cbd5e1;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-muted: rgba(59, 130, 246, 0.1);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --glow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-quaternary: #475569;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-primary: #334155;
+            --border-secondary: #475569;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-heavy: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Cairo', 'Tajawal', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Epic Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--gradient-primary);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="30" cy="30" r="1"/></g></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        .welcome-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: var(--shadow-heavy);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 2;
+            transform: translateY(0);
+            animation: welcomeFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes welcomeFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .welcome-logo {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6)); }
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 18px;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Controls */
+        .language-selector {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .lang-btn {
+            padding: 12px 18px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--accent-primary);
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 60px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before {
+            content: '☀️';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            content: '🌙';
+            transform: translateX(28px);
+        }
+
+        /* Epic Button Styles */
+        .btn {
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-medium);
+            animation: fadeInUp 0.8s ease 0.7s both;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy), var(--glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-danger {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Enhanced API Setup */
+        .api-setup-screen {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            padding: 20px;
+        }
+
+        .api-setup-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 640px;
+            box-shadow: var(--shadow-heavy);
+            animation: slideInUp 0.6s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Personas Screen */
+        .personas-screen {
+            display: none;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            padding: 20px;
+        }
+
+        .personas-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .personas-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .personas-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titlePulse 4s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .personas-nav {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 14px 24px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-tab:hover::before {
+            opacity: 0.1;
+        }
+
+        .nav-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Epic Persona Cards */
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .persona-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardSlideIn 0.6s ease forwards;
+        }
+
+        .persona-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .persona-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .persona-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-heavy);
+            border-color: var(--accent-primary);
+        }
+
+        .persona-card.selected {
+            border-color: var(--accent-primary);
+            background: var(--accent-muted);
+            box-shadow: var(--glow);
+            transform: translateY(-4px) scale(1.01);
+        }
+
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .persona-card:nth-child(1) { animation-delay: 0.1s; }
+        .persona-card:nth-child(2) { animation-delay: 0.2s; }
+        .persona-card:nth-child(3) { animation-delay: 0.3s; }
+        .persona-card:nth-child(4) { animation-delay: 0.4s; }
+        .persona-card:nth-child(5) { animation-delay: 0.5s; }
+        .persona-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .persona-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            transition: all 0.3s ease;
+        }
+
+        .persona-card:hover .persona-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: var(--shadow-light);
+        }
+
+        .persona-name {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .persona-category {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .persona-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .persona-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .persona-card:hover .tag {
+            background: var(--accent-muted);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Enhanced Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-muted);
+            background: var(--bg-secondary);
+        }
+
+        /* Enhanced Chat Interface */
+        .chat-app {
+            display: none;
+            height: 100vh;
+            background: var(--bg-primary);
+            animation: appFadeIn 0.5s ease;
+        }
+
+        @keyframes appFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-left: 2px solid var(--border-primary);
+            position: fixed;
+            height: 100%;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+            backdrop-filter: blur(10px);
+        }
+
+        body[dir="ltr"] .sidebar {
+            right: auto;
+            left: 0;
+            border-left: none;
+            border-right: 2px solid var(--border-primary);
+        }
+
+        .main-content {
+            margin-right: 320px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body[dir="ltr"] .main-content {
+            margin-right: 0;
+            margin-left: 320px;
+        }
+
+        .chat-header {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-primary);
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Epic Messages */
+        .message {
+            padding: 28px 30px;
+            border-bottom: 1px solid var(--border-secondary);
+            animation: messageSlideIn 0.4s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--accent-muted) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+
+        .message-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            gap: 24px;
+        }
+
+        .message-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            font-weight: 800;
+            transition: all 0.3s ease;
+        }
+
+        .message-avatar.user {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-light);
+        }
+
+        .message-avatar.assistant {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .message:hover .message-avatar {
+            transform: scale(1.05);
+        }
+
+        .message-text {
+            flex: 1;
+            color: var(--text-primary);
+            font-size: 16px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* Enhanced Input */
+        .input-container {
+            background: var(--bg-secondary);
+            border-top: 2px solid var(--border-primary);
+            padding: 24px 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 16px 70px 16px 20px;
+            color: var(--text-primary);
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            max-height: 180px;
+            line-height: 1.6;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        body[dir="ltr"] .chat-input {
+            padding: 16px 20px 16px 70px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-muted);
+            background: var(--bg-secondary);
+        }
+
+        .send-button {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow-light);
+        }
+
+        body[dir="ltr"] .send-button {
+            left: auto;
+            right: 12px;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: var(--glow);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Enhanced Persona Management */
+        .persona-management {
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .management-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        /* Control Buttons */
+        .persona-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .persona-card:hover .persona-controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .control-btn.danger:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* Community Store Badges */
+        .popular-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--gradient-secondary);
+            color: white;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-light);
+        }
+
+        body[dir="ltr"] .popular-badge {
+            right: auto;
+            left: 12px;
+        }
+
+        .custom-badge {
+            background: var(--gradient-primary);
+        }
+
+        /* Enhanced Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+        }
+
+        .epic-spinner {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .epic-spinner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--border-primary);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: epicSpin 1s linear infinite;
+        }
+
+        .epic-spinner::after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border: 4px solid transparent;
+            border-bottom: 4px solid var(--success);
+            border-radius: 50%;
+            animation: epicSpin 0.8s linear infinite reverse;
+        }
+
+        @keyframes epicSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Typing Indicator */
+        .typing-indicator {
+            display: none;
+            padding: 28px 30px;
+            border-bottom: 1px solid var(--border-secondary);
+            animation: messageSlideIn 0.4s ease;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { 
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Enhancements */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            body[dir="ltr"] .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-right: 0;
+            }
+
+            body[dir="ltr"] .main-content {
+                margin-left: 0;
+            }
+
+            .personas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-container,
+            .api-setup-container {
+                padding: 40px 30px;
+                margin: 15px;
+            }
+
+            .personas-title {
+                font-size: 36px;
+            }
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 14px;
+            border-radius: 10px;
+            margin: 16px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 14px;
+            border-radius: 10px;
+            margin: 16px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Enhanced Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 5px;
+            opacity: 0.7;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            opacity: 1;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        /* Create Button Enhancement */
+        .create-persona-btn {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-tertiary);
+            border: 3px dashed var(--border-primary);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: var(--text-muted);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-persona-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .create-persona-btn:hover::before {
+            left: 100%;
+        }
+
+        .create-persona-btn:hover {
+            border-color: var(--accent-primary);
+            background: var(--accent-muted);
+            color: var(--accent-primary);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .create-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--bg-quaternary);
+            border: 3px dashed var(--border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .create-persona-btn:hover .create-icon {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            transform: rotate(180deg);
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-heavy);
+            transform: translateX(120%);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            max-width: 400px;
+            font-size: 14px;
+            z-index: 10001;
+            border: 2px solid transparent;
+        }
+
+        body[dir="ltr"] .notification {
+            right: auto;
+            left: 30px;
+            transform: translateX(-120%);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--gradient-secondary);
+            border-color: var(--success);
+        }
+
+        .notification.error {
+            background: var(--gradient-danger);
+            border-color: var(--danger);
+        }
+
+        .notification.info {
+            background: var(--gradient-primary);
+            border-color: var(--info);
+        }
+
+        /* Menu Button for Mobile */
+        .menu-btn {
+            display: none;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: var(--bg-hover);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="language-selector">
+            <button class="lang-btn" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="en">English</button>
+        </div>
+
+        <div class="theme-toggle" id="themeToggle"></div>
+
+        <div class="welcome-container">
+            <div class="welcome-logo">Aithorix</div>
+            <h1 class="welcome-title" data-i18n="welcome.title">مرحباً بك في عالم Aithorix AI</h1>
+            <p class="welcome-subtitle" data-i18n="welcome.subtitle">اكتشف شخصيات ذكية متنوعة أو اصنع شخصيتك الخاصة</p>
+            <div class="welcome-options">
+                <button class="btn btn-primary" onclick="checkApiKey()">
+                    <span data-i18n="welcome.explore">استكشف الشخصيات</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Setup Screen -->
+    <div class="api-setup-screen" id="apiSetupScreen">
+        <div class="api-setup-container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 class="welcome-title" data-i18n="api.title">إعداد مفتاح Gemini API</h2>
+                <p class="welcome-subtitle" data-i18n="api.subtitle">احتاج مفتاح API مجاني عشان أشغل الشخصيات</p>
+            </div>
+
+            <div class="api-input-group">
+                <label class="form-label" for="apiKeyInput" data-i18n="api.key">مفتاح Gemini API:</label>
+                <input 
+                    type="password" 
+                    id="apiKeyInput" 
+                    class="form-input" 
+                    data-i18n-placeholder="api.placeholder"
+                    placeholder="AIzaSy... الصق مفتاحك هنا"
+                >
+                <div style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">
+                    <span data-i18n="api.getkey">احصل على مفتاحك مجاناً من</span>
+                    <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: var(--accent-primary); font-weight: 600;">Google AI Studio</a>
+                    <div class="tutorial-toggle" onclick="toggleTutorial()" data-i18n="api.tutorial">📖 شرح مفصل كيف تجيب المفتاح</div>
+                </div>
+            </div>
+
+            <div class="tutorial-section" id="tutorialSection">
+                <h4 style="margin-bottom: 20px; font-size: 16px;" data-i18n="tutorial.title">كيف تجيب مفتاح Gemini API مجاناً:</h4>
+                <ol class="tutorial-steps">
+                    <li data-i18n="tutorial.step1">روح لموقع <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: var(--accent-primary);">Google AI Studio</a></li>
+                    <li data-i18n="tutorial.step2">سجل دخول بحساب Google حقك</li>
+                    <li data-i18n="tutorial.step3">اضغط على "Create API Key"</li>
+                    <li data-i18n="tutorial.step4">اختر مشروع جديد أو مشروع موجود</li>
+                    <li data-i18n="tutorial.step5">انسخ المفتاح (يبدأ بـ AIzaSy...)</li>
+                    <li data-i18n="tutorial.step6">الصقه في الخانة فوق واضغط "حفظ المفتاح"</li>
+                </ol>
+                <div style="background: var(--bg-quaternary); padding: 16px; border-radius: 10px; margin-top: 20px; font-size: 14px;">
+                    <strong data-i18n="tutorial.note">ملاحظة:</strong>
+                    <span data-i18n="tutorial.free">المفتاح مجاني 100% ومايحتاج بطاقة ائتمانية</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 14px; align-items: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="saveApiKey()">
+                    <span data-i18n="api.save">حفظ المفتاح</span>
+                </button>
+                <button class="btn btn-secondary" onclick="testApiKey()">
+                    <span data-i18n="api.test">اختبار الاتصال</span>
+                </button>
+            </div>
+
+            <div class="api-status" id="apiStatus"></div>
+        </div>
+    </div>
+
+    <!-- Personas Screen -->
+    <div class="personas-screen" id="personasScreen">
+        <div class="personas-container">
+            <div class="personas-header">
+                <h1 class="personas-title" data-i18n="personas.title">مكتبة الشخصيات</h1>
+                <p class="personas-subtitle" data-i18n="personas.subtitle">اكتشف شخصيات مميزة أو اصنع شخصيتك الخاصة</p>
+                
+                <div class="personas-nav">
+                    <div class="nav-tab active" data-section="popular" data-i18n="nav.popular">الأشهر</div>
+                    <div class="nav-tab" data-section="categories" data-i18n="nav.categories">الفئات</div>
+                    <div class="nav-tab" data-section="create" data-i18n="nav.create">إنشاء جديد</div>
+                </div>
+            </div>
+
+            <!-- Popular Personas -->
+            <div class="personas-section" id="popularSection">
+                <h2 class="section-title" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+                    <span data-i18n="sections.popular">⭐ الشخصيات الأشهر</span>
+                </h2>
+                <p class="section-subtitle" style="margin-bottom: 30px; font-size: 16px;" data-i18n="sections.popular_desc">مجموعة من أفضل الشخصيات المصممة خصيصاً لك</p>
+                
+                <div class="personas-grid" id="popularPersonas">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="personas-section hidden" id="categoriesSection">
+                <h2 class="section-title" style="margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+                    <span data-i18n="sections.categories">📂 تصفح حسب الفئة</span>
+                </h2>
+                
+                <div id="categoriesTabs" style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 30px;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
+                <div class="personas-grid" id="categoryPersonas">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- My Personas -->
+            <div class="personas-section hidden" id="myPersonasSection">
+                <h2 class="section-title" style="margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+                    <span data-i18n="sections.my">👤 شخصياتي الخاصة</span>
+                </h2>
+                <p class="section-subtitle" style="margin-bottom: 30px; font-size: 16px;" data-i18n="sections.my_desc">الشخصيات التي أنشأتها وصممتها</p>
+                
+                <div class="personas-grid" id="myPersonas">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Create New -->
+            <div class="personas-section hidden" id="createSection">
+                <h2 class="section-title" style="margin-bottom: 20px; font-size: 24px; font-weight: 800;">
+                    <span data-i18n="sections.create">✨ إنشاء شخصية جديدة</span>
+                </h2>
+                <p class="section-subtitle" style="margin-bottom: 30px; font-size: 16px;" data-i18n="sections.create_desc">اصنع شخصية AI فريدة بمواصفاتك الخاصة</p>
+                
+                <div class="personas-grid">
+                    <div class="create-persona-btn" onclick="openCreateModal()">
+                        <div class="create-icon">+</div>
+                        <h3 data-i18n="create.title" style="font-size: 18px; font-weight: 700;">إنشاء شخصية جديدة</h3>
+                        <p data-i18n="create.desc" style="font-size: 14px;">اصنع شخصية ذكية مخصصة لاحتياجاتك</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue Button -->
+            <div style="text-align: center; margin-top: 50px;">
+                <button class="btn btn-primary" id="continueBtn" style="opacity: 0.5; pointer-events: none;" onclick="startChat()">
+                    <span data-i18n="continue">بدء المحادثة</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Persona Modal -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header" style="padding: 30px 30px 20px;">
+                <h2 class="modal-title" style="font-size: 20px; font-weight: 800;" data-i18n="modal.title">إنشاء شخصية جديدة</h2>
+                <p class="modal-subtitle" style="margin-top: 6px; color: var(--text-secondary);" data-i18n="modal.subtitle">اصنع شخصية AI فريدة بمواصفاتك الخاصة</p>
+            </div>
+            <div class="modal-body" style="padding: 0 30px;">
+                <form id="createPersonaForm">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.name">اسم الشخصية</label>
+                        <input type="text" class="form-input" id="personaName" data-i18n-placeholder="form.name_placeholder" placeholder="مثال: المعلم الذكي">
+                        <div class="error-message hidden" id="nameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.icon">اختر رمز الشخصية</label>
+                        <div class="emoji-picker" id="emojiPicker" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 10px;">
+                            <div class="emoji-option" data-emoji="👩‍🏫" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍🏫</div>
+                            <div class="emoji-option" data-emoji="👨‍⚕️" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👨‍⚕️</div>
+                            <div class="emoji-option" data-emoji="👩‍💼" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍💼</div>
+                            <div class="emoji-option" data-emoji="👨‍🔬" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👨‍🔬</div>
+                            <div class="emoji-option" data-emoji="👩‍🎨" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍🎨</div>
+                            <div class="emoji-option" data-emoji="👨‍🍳" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👨‍🍳</div>
+                            <div class="emoji-option" data-emoji="🤖" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">🤖</div>
+                            <div class="emoji-option" data-emoji="👸" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👸</div>
+                            <div class="emoji-option" data-emoji="🧙‍♂️" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">🧙‍♂️</div>
+                            <div class="emoji-option" data-emoji="👩‍🚀" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍🚀</div>
+                            <div class="emoji-option" data-emoji="🦸‍♀️" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">🦸‍♀️</div>
+                            <div class="emoji-option" data-emoji="🧞‍♂️" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">🧞‍♂️</div>
+                            <div class="emoji-option" data-emoji="👩‍🎤" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍🎤</div>
+                            <div class="emoji-option" data-emoji="👨‍💻" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👨‍💻</div>
+                            <div class="emoji-option" data-emoji="👩‍🔧" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">👩‍🔧</div>
+                            <div class="emoji-option" data-emoji="🧑‍🎓" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s ease;">🧑‍🎓</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.category">الفئة</label>
+                        <select class="form-input" id="personaCategory">
+                            <option value="helper" data-i18n="categories.helper"></option>
+                            <option value="romantic" data-i18n="categories.romantic"></option>
+                            <option value="friend" data-i18n="categories.friend"></option>
+                            <option value="professional" data-i18n="categories.professional"></option>
+                            <option value="entertainment" data-i18n="categories.entertainment"></option>
+                            <option value="educational" data-i18n="categories.educational"></option>
+                            <option value="creative" data-i18n="categories.creative"></option>
+                            <option value="spiritual" data-i18n="categories.spiritual"></option>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.description">وصف مختصر</label>
+                        <input type="text" class="form-input" id="personaDescription" data-i18n-placeholder="form.desc_placeholder" placeholder="وصف قصير عن الشخصية وما تقدمه">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.personality">الشخصية والسلوك</label>
+                        <textarea class="form-input form-textarea" style="min-height: 120px; resize: vertical;" id="personaPersonality" data-i18n-placeholder="form.personality_placeholder" placeholder="اكتب كيف تريد الشخصية تتصرف وتتكلم..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.expertise">التخصص والمعرفة</label>
+                        <textarea class="form-input form-textarea" style="min-height: 120px; resize: vertical;" id="personaExpertise" data-i18n-placeholder="form.expertise_placeholder" placeholder="في إيش الشخصية خبيرة؟"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="form.style">أسلوب الكلام</label>
+                        <select class="form-input" id="personaLanguageStyle">
+                            <option value="formal" data-i18n="styles.formal">رسمي ومهذب</option>
+                            <option value="casual" data-i18n="styles.casual">عادي وودود</option>
+                            <option value="slang" data-i18n="styles.slang">شبابي وعامي</option>
+                            <option value="romantic" data-i18n="styles.romantic">رومانسي وحنون</option>
+                            <option value="funny" data-i18n="styles.funny">مرح ومضحك</option>
+                            <option value="wise" data-i18n="styles.wise">حكيم ومتأمل</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="padding: 20px 30px; border-top: 2px solid var(--border-secondary); display: flex; gap: 14px; justify-content: flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="closeCreateModal()">
+                    <span data-i18n="cancel">إلغاء</span>
+                </button>
+                <button type="button" class="btn btn-primary" onclick="createPersona()">
+                    <span data-i18n="create_btn">إنشاء الشخصية</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat App -->
+    <div class="chat-app" id="chatApp">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div style="padding: 30px;">
+                <button class="btn btn-secondary" onclick="backToPersonas()" style="width: 100%; margin-bottom: 14px;">
+                    <span data-i18n="back">← العودة للشخصيات</span>
+                </button>
+                <button class="btn btn-primary" onclick="startNewChat()" style="width: 100%; margin-bottom: 14px;">
+                    <span data-i18n="new_chat">محادثة جديدة</span>
+                </button>
+                <button class="btn btn-secondary" onclick="showApiSettings()" style="width: 100%;">
+                    <span data-i18n="api_settings">إعدادات API</span>
+                </button>
+            </div>
+
+            <div style="padding: 0 30px; border-top: 2px solid var(--border-secondary); padding-top: 30px;">
+                <h4 style="color: var(--text-muted); margin-bottom: 18px; font-size: 14px; font-weight: 700;" data-i18n="active_persona">الشخصية النشطة</h4>
+                <div id="currentPersonaDisplay" style="background: var(--bg-tertiary); padding: 20px; border-radius: 12px; border: 2px solid var(--border-primary);">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content --> 
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="current-persona-display" style="display: flex; align-items: center;">
+                    <div class="current-persona-avatar" id="chatPersonaAvatar" style="width: 50px; height: 50px; border-radius: 12px; background: var(--bg-tertiary); border: 2px solid var(--border-primary); display: flex; align-items: center; justify-content: center; font-size: 24px;">🤖</div>
+                    <div class="current-persona-info" style="margin-left: 16px;">
+                        <h3 id="chatPersonaName" style="font-size: 18px; font-weight: 800; margin-bottom: 3px;" data-i18n="select_persona">اختر شخصية</h3>
+                        <p id="chatPersonaDesc" style="font-size: 13px; color: var(--text-muted);" data-i18n="no_persona">لم يتم اختيار شخصية</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <button class="menu-btn" onclick="toggleSidebar()" id="menuBtn">☰</button>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chatContainer" style="flex: 1; overflow-y: auto; padding: 0;">
+                <div class="empty-chat" id="emptyChat" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center;">
+                    <div style="font-size: 80px; font-weight: 900; background: var(--gradient-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 30px; animation: logoGlow 3s ease-in-out infinite;">NEXA</div>
+                    <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 16px; color: var(--text-primary);" data-i18n="chat.welcome">مرحباً! كيف يمكنني مساعدتك؟</h2>
+                    <p style="color: var(--text-secondary); font-size: 18px; margin-bottom: 30px;" data-i18n="chat.start">ابدأ محادثة مع الشخصية المختارة</p>
+                    <div style="display: flex; gap: 20px; color: var(--text-muted); font-size: 14px;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span></span>
+                            <span>AI مدعوم بـ Gemini</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-content" style="max-width: 900px; margin: 0 auto; display: flex; gap: 24px; padding: 28px 30px;">
+                    <div class="message-avatar assistant" id="typingAvatar">🤖</div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrapper" style="max-width: 900px; margin: 0 auto; position: relative;">
+                    <textarea class="chat-input" id="chatInput" data-i18n-placeholder="chat.placeholder" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                    <button class="send-button" id="sendButton">
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M15.854.146a.5.5 0 0 1 .11.54L13.026 8.74a.5.5 0 0 1-.531.319l-5.414-.908a.5.5 0 0 0-.1.994l5.414.908a.5.5 0 0 1 .531.319l2.938 8.054a.5.5 0 0 1-.11.54.5.5 0 0 1-.595.076L.146 8.854a.5.5 0 0 1 0-.708L14.854.146a.5.5 0 0 1 .595-.076z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Internationalization
+const translations = {
+  ar: {
+    "welcome.title": "مرحباً بك في عالم Aithorix AI",
+    "welcome.subtitle": "اكتشف شخصيات ذكية متنوعة أو اصنع شخصيتك الخاصة",
+    "welcome.explore": "استكشف الشخصيات",
+    "api.title": "إعداد مفتاح Gemini API",
+    "api.subtitle": "احتاج مفتاح API مجاني عشان أشغل الشخصيات",
+    "api.key": "مفتاح Gemini API:",
+    "api.placeholder": "AIzaSy... الصق مفتاحك هنا",
+    "api.getkey": "احصل على مفتاحك مجاناً من",
+    "api.save": "حفظ المفتاح",
+    "api.test": "اختبار الاتصال",
+    "api.tutorial": "📖 شرح مفصل كيف تجيب المفتاح",
+    "tutorial.title": "كيف تجيب مفتاح Gemini API مجاناً:",
+    "tutorial.step1": "روح لموقع Google AI Studio",
+    "tutorial.step2": "سجل دخول بحساب Google حقك",
+    "tutorial.step3": "اضغط على \"Create API Key\"",
+    "tutorial.step4": "اختر مشروع جديد أو مشروع موجود",
+    "tutorial.step5": "انسخ المفتاح (يبدأ بـ AIzaSy...)",
+    "tutorial.step6": "الصقه في الخانة فوق واضغط \"حفظ المفتاح\"",
+    "tutorial.note": "ملاحظة:",
+    "tutorial.free": "المفتاح مجاني 100% ومايحتاج بطاقة ائتمانية",
+    "personas.title": "مكتبة الشخصيات",
+    "personas.subtitle": "اكتشف شخصيات مميزة أو اصنع شخصيتك الخاصة",
+    "nav.popular": "الأشهر",
+    "nav.categories": "شخصياتي", 
+    "nav.my": "شخصياتي",
+    "nav.create": "إنشاء جديد",
+    "sections.popular": "⭐ الشخصيات الأشهر",
+    "sections.popular_desc": "مجموعة من أفضل الشخصيات المصممة خصيصاً لك",
+    "sections.categories": "📂 تصفح حسب الفئة",
+    "sections.my": "👤 شخصياتي الخاصة",
+    "sections.my_desc": "الشخصيات التي أنشأتها وصممتها",
+    "sections.create": "✨ إنشاء شخصية جديدة",
+    "sections.create_desc": "اصنع شخصية AI فريدة بمواصفاتك الخاصة",
+    "continue": "بدء المحادثة",
+    "back": "← العودة للشخصيات",
+    "new_chat": "محادثة جديدة",
+    "api_settings": "إعدادات API",
+    "active_persona": "الشخصية النشطة",
+    "select_persona": "اختر شخصية",
+    "no_persona": "لم يتم اختيار شخصية",
+    "chat.welcome": "مرحباً! كيف يمكنني مساعدتك؟",
+    "chat.start": "ابدأ محادثة مع الشخصية المختارة",
+    "chat.placeholder": "اكتب رسالتك هنا...",
+    "create.title": "إنشاء شخصية جديدة",
+    "create.desc": "اصنع شخصية ذكية مخصصة لاحتياجاتك",
+    "modal.title": "إنشاء شخصية جديدة",
+    "modal.subtitle": "اصنع شخصية AI فريدة بمواصفاتك الخاصة",
+    "form.name": "اسم الشخصية",
+    "form.name_placeholder": "مثال: المعلم الذكي",
+    "form.icon": "اختر رمز الشخصية",
+    "form.category": "الفئة",
+    "form.description": "وصف مختصر",
+    "form.desc_placeholder": "وصف قصير عن الشخصية وما تقدمه",
+    "form.personality": "الشخصية والسلوك",
+    "form.personality_placeholder": "اكتب كيف تريد الشخصية تتصرف وتتكلم...",
+    "form.expertise": "التخصص والمعرفة",
+    "form.expertise_placeholder": "في إيش الشخصية خبيرة؟",
+    "form.style": "أسلوب الكلام",
+    "categories.helper": "مساعد ومرشد",
+    "categories.romantic": "رومانسي",
+    "categories.friend": "صداقة",
+    "categories.professional": "مهني ومتخصص",
+    "categories.entertainment": "ترفيه وتسلية",
+    "categories.educational": "تعليمي",
+    "categories.creative": "إبداعي وفني",
+    "categories.spiritual": "روحاني وديني",
+    "styles.formal": "رسمي ومهذب",
+    "styles.casual": "عادي وودود",
+    "styles.slang": "شبابي وعامي",
+    "styles.romantic": "رومانسي وحنون",
+    "styles.funny": "مرح ومضحك",
+    "styles.wise": "حكيم ومتأمل",
+    "cancel": "إلغاء",
+    "create_btn": "إنشاء الشخصية",
+    "categories_data": {
+      "romantic": { "name": "رومانسي", "icon": "💕" },
+      "friend": { "name": "صداقة", "icon": "👫" },
+      "helper": { "name": "مساعد ومرشد", "icon": "🤝" },
+      "professional": { "name": "مهني ومتخصص", "icon": "💼" },
+      "entertainment": { "name": "ترفيه وتسلية", "icon": "🎭" },
+      "educational": { "name": "تعليمي", "icon": "📚" },
+      "creative": { "name": "إبداعي وفني", "icon": "🎨" },
+      "spiritual": { "name": "روحاني وديني", "icon": "🕌" }
+    }
+  },
+  en: {
+    "welcome.title": "Welcome to the world of Aithorix AI",
+    "welcome.subtitle": "Discover diverse intelligent personas or create your own",
+    "welcome.explore": "Explore Personas",
+    "api.title": "Gemini API Key Setup",
+    "api.subtitle": "I need a free API key to run the personas",
+    "api.key": "Gemini API Key:",
+    "api.placeholder": "AIzaSy... Paste your key here",
+    "api.getkey": "Get your free key from",
+    "api.save": "Save Key",
+    "api.test": "Test Connection",
+    "api.tutorial": "📖 Detailed guide on how to get the key",
+    "tutorial.title": "How to get a Gemini API key for free:",
+    "tutorial.step1": "Go to Google AI Studio website",
+    "tutorial.step2": "Sign in with your Google account",
+    "tutorial.step3": "Click on 'Create API Key'",
+    "tutorial.step4": "Choose a new project or an existing project",
+    "tutorial.step5": "Copy the key (starts with AIzaSy...)",
+    "tutorial.step6": "Paste it in the field above and click 'Save Key'",
+    "tutorial.note": "Note:",
+    "tutorial.free": "The key is 100% free and requires no credit card",
+    "personas.title": "Persona Library",
+    "personas.subtitle": "Discover unique personas or create your own",
+    "nav.popular": "Popular",
+    "nav.categories": "My Personas",
+    "nav.my": "My Personas",
+    "nav.create": "Create New",
+    "sections.popular": "⭐ Most Popular Personas",
+    "sections.popular_desc": "A collection of top personas designed just for you",
+    "sections.categories": "📂 Browse by Category",
+    "sections.my": "👤 My Custom Personas",
+    "sections.my_desc": "Personas you have created and designed",
+    "sections.create": "✨ Create a New Persona",
+    "sections.create_desc": "Create a unique AI persona with your own specifications",
+    "continue": "Start Conversation",
+    "back": "← Back to Personas",
+    "new_chat": "New Chat",
+    "api_settings": "API Settings",
+    "active_persona": "Active Persona",
+    "select_persona": "Select a Persona",
+    "no_persona": "No persona selected",
+    "chat.welcome": "Hello! How can I assist you?",
+    "chat.start": "Start a conversation with the selected persona",
+    "chat.placeholder": "Type your message here...",
+    "create.title": "Create a New Persona",
+    "create.desc": "Create an intelligent persona tailored to your needs",
+    "modal.title": "Create a New Persona",
+    "modal.subtitle": "Create a unique AI persona with your own specifications",
+    "form.name": "Persona Name",
+    "form.name_placeholder": "Example: The Smart Teacher",
+    "form.icon": "Choose Persona Icon",
+    "form.category": "Category",
+    "form.description": "Short Description",
+    "form.desc_placeholder": "A brief description of the persona and what it offers",
+    "form.personality": "Personality & Behavior",
+    "form.personality_placeholder": "Write how you want the persona to behave and speak...",
+    "form.expertise": "Expertise & Knowledge",
+    "form.expertise_placeholder": "What is the persona skilled in?",
+    "form.style": "Speech Style",
+    "categories.helper": "Helper & Guide",
+    "categories.romantic": "Romantic",
+    "categories.friend": "Friendship",
+    "categories.professional": "Professional & Expert",
+    "categories.entertainment": "Entertainment & Fun",
+    "categories.educational": "Educational",
+    "categories.creative": "Creative & Artistic",
+    "categories.spiritual": "Spiritual & Religious",
+    "styles.formal": "Formal & Polite",
+    "styles.casual": "Casual & Friendly",
+    "styles.slang": "Youthful & Colloquial",
+    "styles.romantic": "Romantic & Caring",
+    "styles.funny": "Fun & Humorous",
+    "styles.wise": "Wise & Reflective",
+    "cancel": "Cancel",
+    "create_btn": "Create Persona",
+    "categories_data": {
+      "romantic": { "name": "Romantic", "icon": "💕" },
+      "friend": { "name": "Friendship", "icon": "👫" },
+      "helper": { "name": "Helper & Guide", "icon": "🤝" },
+      "professional": { "name": "Professional & Expert", "icon": "💼" },
+      "entertainment": { "name": "Entertainment", "icon": "🎭" },
+      "educational": { "name": "Educational", "icon": "📚" },
+      "creative": { "name": "Creative & Artistic", "icon": "🎨" },
+      "spiritual": { "name": "Spiritual & Religious", "icon": "🕌" }
+    }
+  }
+};
+
+
+
+        class EnhancedNexaAI {
+            constructor() {
+                this.selectedPersona = null;
+                this.messages = [];
+                this.apiKey = localStorage.getItem('nexaApiKey') || '';
+                this.hasApiKey = !!this.apiKey;
+                this.myPersonas = JSON.parse(localStorage.getItem('myPersonas') || '[]');
+                this.popularPersonas = this.createPopularPersonas();
+                this.currentLang = this.detectLanguage();
+                this.currentTheme = localStorage.getItem('theme') || 'light';
+                
+                this.categories = {
+  romantic: { name: "رومانسي / Romantic", icon: "💕" },
+  friend: { name: "صداقة / Friendship", icon: "👫" },
+  helper: { name: "مساعد ومرشد / Helper & Guide", icon: "🤝" },
+  professional: { name: "مهني ومتخصص / Professional & Expert", icon: "💼" },
+  entertainment: { name: "ترفيه وتسلية / Entertainment & Fun", icon: "🎭" },
+  educational: { name: "تعليمي / Educational", icon: "📚" },
+  creative: { name: "إبداعي وفني / Creative & Artistic", icon: "🎨" },
+  spiritual: { name: "روحاني وديني / Spiritual & Religious", icon: "🕌" }
+                };
+
+                this.currentCategory = 'all';
+                this.currentSection = 'popular';
+                
+                this.initializeApp();
+            }
+
+            detectLanguage() {
+                const browserLang = navigator.language || navigator.userLanguage;
+                if (browserLang.startsWith('ar')) return 'ar';
+                if (browserLang.startsWith('es')) return 'es';
+                return 'en';
+            }
+
+            initializeApp() {
+                this.setupLanguage();
+                this.setupTheme();
+                this.setupEventListeners();
+                this.showWelcomeScreen();
+            }
+
+            setupLanguage() {
+                const lang = localStorage.getItem('language') || this.currentLang;
+                this.setLanguage(lang);
+            }
+
+            setLanguage(lang) {
+                this.currentLang = lang;
+                localStorage.setItem('language', lang);
+                
+                document.documentElement.lang = lang;
+                document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+                
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                this.updateTranslations();
+            }
+
+            updateTranslations() {
+                const langData = translations[this.currentLang] || translations.en;
+                
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.dataset.i18n;
+                    if (langData[key]) {
+                        element.textContent = langData[key];
+                    }
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.dataset.i18nPlaceholder;
+                    if (langData[key]) {
+                        element.placeholder = langData[key];
+                    }
+                });
+            }
+
+            setupTheme() {
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+                this.currentTheme = theme;
+            }
+
+            toggleTheme() {
+                const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                this.currentTheme = newTheme;
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.setLanguage(e.target.dataset.lang);
+                    });
+                });
+
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    this.toggleTheme();
+                });
+
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => this.switchSection(e.target.dataset.section));
+                });
+
+                document.querySelectorAll('.emoji-option').forEach(emoji => {
+                    emoji.addEventListener('click', (e) => this.selectEmoji(e.target.dataset.emoji));
+                });
+
+                const sendBtn = document.getElementById('sendButton');
+                const chatInput = document.getElementById('chatInput');
+                
+                if (sendBtn) sendBtn.addEventListener('click', () => this.sendMessage());
+                if (chatInput) {
+                    chatInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            this.sendMessage();
+                        }
+                    });
+                    chatInput.addEventListener('input', this.autoResize);
+                }
+            }
+
+            createPopularPersonas() {
+                const popularPersonas = {
+                    ar: [
+                        {
+                            id: 'popular_teacher',
+                            name: "د.  المعلم الذكي",
+                            icon: "👩‍🏫",
+                            category: "educational",
+                            description: "دكتورة متخصصة في التعليم التفاعلي وتبسيط المفاهيم المعقدة",
+                            tags: ["تعليم", "رياضيات", "علوم", "شرح"],
+                            systemPrompt: "أنت د. سارة، معلمة ذكية ومتخصصة في التعليم التفاعلي. تتميزين بالصبر والقدرة على تبسيط المفاهيم المعقدة. تستخدمين أمثلة من الواقع وتشجعين الطلاب على التفكير النقدي."
+                        },
+                        {
+                            id: 'popular_chef',
+                            name: "الشيف ",
+                            icon: "👨‍🍳",
+                            category: "helper",
+                            description: "خبير في المأكولات العربية والعالمية، متخصص في الطبخ الصحي",
+                            tags: ["طبخ", "وصفات", "صحي", "عربي"],
+                            systemPrompt: "أنت الشيف عبدالله، خبير طبخ متخصص في المأكولات العربية والعالمية. تقدم وصفات سهلة ولذيذة وتركز على الطبخ الصحي. أسلوبك ودود ومشجع."
+                        },
+                        {
+                            id: 'popular_counselor',
+                            name: "أخصائية ",
+                            icon: "🧠",
+                            category: "helper",
+                            description: "أخصائية نفسية تقدم الدعم والإرشاد النفسي بطريقة علمية ومتفهمة",
+                            tags: ["نفسي", "إرشاد", "دعم", "تطوير"],
+                            systemPrompt: "أنت أخصائية نور، متخصصة في علم النفس والإرشاد. تقدمين الدعم النفسي والمشورة بطريقة علمية ومتفهمة. تركزين على تمكين الأشخاص وتطوير مهاراتهم الشخصية."
+                        },
+                        {
+                            id: 'popular_tech',
+                            name: "م. أحمد ",
+                            icon: "👨‍💻",
+                            category: "professional",
+                            description: "مهندس برمجيات خبير في التكنولوجيا والبرمجة والذكاء الاصطناعي",
+                            tags: ["برمجة", "تقنية", "ذكاء اصطناعي", "حلول"],
+                            systemPrompt: "أنت م. أحمد، مهندس برمجيات خبير في التكنولوجيا والذكاء الاصطناعي. تقدم حلول تقنية مبتكرة وتشرح المفاهيم التقنية بطريقة مبسطة. أسلوبك عملي ومباشر."
+                        },
+                        {
+                            id: 'popular_creative',
+                            name: "الفنانة ",
+                            icon: "👩‍🎨",
+                            category: "creative",
+                            description: "فنانة مبدعة متخصصة في الفنون البصرية والتصميم والإبداع",
+                            tags: ["فن", "تصميم", "إبداع", "رسم"],
+                            systemPrompt: "أنت الفنانة ليلى، مبدعة ومتخصصة في الفنون البصرية والتصميم. تلهمين الآخرين للإبداع وتقدمين نصائح فنية مفيدة. شخصيتك مرحة ومليئة بالحيوية."
+                        },
+                        {
+                            id: 'popular_fitness',
+                            name: "كوتش ",
+                            icon: "💪",
+                            category: "helper",
+                            description: "مدرب لياقة بدنية متخصص في التغذية الصحية والتمارين الرياضية",
+                            tags: ["لياقة", "تغذية", "رياضة", "صحة"],
+                            systemPrompt: "أنت كوتش خالد، مدرب لياقة بدنية ومتخصص في التغذية الصحية. تقدم برامج تمارين مخصصة ونصائح تغذية علمية. أسلوبك محفز ومشجع."
+                        }
+                    ],
+                    en: [
+                        {
+                            id: 'popular_teacher_en',
+                            name: "Dr. Alex Teacher",
+                            icon: "👨‍🏫",
+                            category: "educational",
+                            description: "Educational specialist focused on interactive learning and simplifying complex concepts",
+                            tags: ["education", "math", "science", "explanation"],
+                            systemPrompt: "You are Dr. Alex, an intelligent teacher specialized in interactive education. You excel at patience and simplifying complex concepts. You use real-world examples and encourage critical thinking."
+                        },
+                        {
+                            id: 'popular_tech_en',
+                            name: "Tech Expert Mike",
+                            icon: "👨‍💻",
+                            category: "professional",
+                            description: "Software engineer expert in technology, programming, and artificial intelligence",
+                            tags: ["programming", "technology", "AI", "solutions"],
+                            systemPrompt: "You are Mike, a software engineer expert in technology and artificial intelligence. You provide innovative tech solutions and explain technical concepts simply. Your style is practical and direct."
+                        }
+                    ]
+                };
+
+                return popularPersonas[this.currentLang] || popularPersonas.en;
+            }
+
+            showWelcomeScreen() {
+                this.hideAllScreens();
+                document.getElementById('welcomeScreen').style.display = 'flex';
+            }
+
+            showApiSetupScreen() {
+                this.hideAllScreens();
+                document.getElementById('apiSetupScreen').style.display = 'flex';
+                
+                if (this.apiKey) {
+                    document.getElementById('apiKeyInput').value = this.apiKey;
+                }
+            }
+
+            showPersonasScreen() {
+                this.hideAllScreens();
+                document.getElementById('personasScreen').style.display = 'block';
+                this.switchSection('popular');
+            }
+
+            showChatApp() {
+                this.hideAllScreens();
+                document.getElementById('chatApp').style.display = 'block';
+                this.setupChatInterface();
+            }
+
+            hideAllScreens() {
+                const screens = ['welcomeScreen', 'apiSetupScreen', 'personasScreen', 'chatApp'];
+                screens.forEach(screen => {
+                    const element = document.getElementById(screen);
+                    if (element) element.style.display = 'none';
+                });
+            }
+
+            displayPopularPersonas() {
+                const container = document.getElementById('popularPersonas');
+                container.innerHTML = '';
+                
+                this.popularPersonas.forEach((persona, index) => {
+                    const card = this.createEnhancedPersonaCard(persona, true);
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    container.appendChild(card);
+                });
+            }
+
+            createEnhancedPersonaCard(persona, isPopular = false, isCustom = false) {
+                const card = document.createElement('div');
+                card.className = 'persona-card';
+                card.onclick = () => this.selectPersona(persona);
+                
+                const popularBadge = isPopular ? '<div class="popular-badge">مميز</div>' : '';
+                const customBadge = isCustom ? '<div class="popular-badge custom-badge">مخصص</div>' : '';
+                
+                card.innerHTML = `
+                    ${popularBadge}${customBadge}
+                    <div class="persona-header">
+                        <div class="persona-icon">${persona.icon}</div>
+                        <div class="persona-info">
+                            <div class="persona-name">${persona.name}</div>
+                            <div class="persona-category">${this.categories[persona.category]?.name || persona.category}</div>
+                        </div>
+                    </div>
+                    <div class="persona-desc">${persona.description}</div>
+                    <div class="persona-tags">
+                        ${persona.tags ? persona.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : ''}
+                    </div>
+                    ${isCustom ? this.createPersonaControls(persona) : ''}
+                `;
+                
+                return card;
+            }
+
+            createPersonaControls(persona) {
+                return `
+                    <div class="persona-controls">
+                        <button class="control-btn" onclick="event.stopPropagation(); nexaAI.editPersona('${persona.id}')">تعديل</button>
+                        <button class="control-btn danger" onclick="event.stopPropagation(); nexaAI.deletePersona('${persona.id}')">حذف</button>
+                    </div>
+                `;
+            }
+
+            editPersona(id) {
+                const persona = this.myPersonas.find(p => p.id === id);
+                if (!persona) return;
+
+                // Pre-fill modal with persona data
+                document.getElementById('personaName').value = persona.name;
+                document.getElementById('personaDescription').value = persona.description;
+                document.getElementById('personaPersonality').value = persona.personality || '';
+                document.getElementById('personaExpertise').value = persona.expertise || '';
+                document.getElementById('personaCategory').value = persona.category;
+                document.getElementById('personaLanguageStyle').value = persona.languageStyle || 'casual';
+
+                // Select emoji
+                document.querySelectorAll('.emoji-option').forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.dataset.emoji === persona.icon) {
+                        option.classList.add('selected');
+                    }
+                });
+
+                this.editingPersonaId = id;
+                document.getElementById('createModal').style.display = 'flex';
+            }
+
+            deletePersona(id) {
+                const persona = this.myPersonas.find(p => p.id === id);
+                if (!persona) return;
+
+                const confirmMsg = this.currentLang === 'ar' ? 
+                    `هل تريد حذف شخصية "${persona.name}"؟` :
+                    `Delete persona "${persona.name}"?`;
+
+                if (confirm(confirmMsg)) {
+                    this.myPersonas = this.myPersonas.filter(p => p.id !== id);
+                    localStorage.setItem('myPersonas', JSON.stringify(this.myPersonas));
+
+                    this.loadMyPersonas();
+                    
+                    const successMsg = this.currentLang === 'ar' ? 'تم حذف الشخصية بنجاح' : 'Persona deleted successfully';
+                    this.showNotification(successMsg, 'success');
+                }
+            }
+
+            checkApiKey() {
+                if (this.hasApiKey) {
+                    this.showPersonasScreen();
+                } else {
+                    this.showApiSetupScreen();
+                }
+            }
+
+            async saveApiKey() {
+                const apiKeyInput = document.getElementById('apiKeyInput');
+                const apiKey = apiKeyInput.value.trim();
+                
+                if (!apiKey) {
+                    this.showApiStatus('Please enter an API key first', 'error');
+                    return;
+                }
+
+                if (!apiKey.startsWith('AIzaSy')) {
+                    this.showApiStatus('Invalid API key. Must start with AIzaSy...', 'error');
+                    return;
+                }
+
+                try {
+                    await this.testGeminiAPI(apiKey);
+                    
+                    localStorage.setItem('nexaApiKey', apiKey);
+                    this.apiKey = apiKey;
+                    this.hasApiKey = true;
+
+                    this.showApiStatus('API key saved successfully!', 'success');
+                    
+                    setTimeout(() => {
+                        this.showPersonasScreen();
+                    }, 1500);
+                } catch (error) {
+                    this.showApiStatus('Invalid API key or connection failed. Please check your key.', 'error');
+                }
+            }
+
+            async testGeminiAPI(testKey) {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${testKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: "Test connection"
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.1,
+                            maxOutputTokens: 10,
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.candidates || !data.candidates[0]) {
+                    throw new Error('Invalid response format');
+                }
+            }
+
+            showApiStatus(message, type) {
+                let statusDiv = document.getElementById('apiStatus');
+                if (!statusDiv) {
+                    statusDiv = document.createElement('div');
+                    statusDiv.id = 'apiStatus';
+                    document.querySelector('.api-setup-container').appendChild(statusDiv);
+                }
+                
+                statusDiv.textContent = message;
+                statusDiv.className = `${type}-message`;
+                statusDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    if (statusDiv) statusDiv.style.display = 'none';
+                }, 5000);
+            }
+
+            switchSection(section) {
+                this.currentSection = section;
+                
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-section="${section}"]`).classList.add('active');
+                
+                document.querySelectorAll('.personas-section').forEach(sec => {
+                    sec.classList.add('hidden');
+                });
+                document.getElementById(section + 'Section').classList.remove('hidden');
+                
+                switch(section) {
+                    case 'popular':
+                        this.displayPopularPersonas();
+                        break;
+                    case 'categories':
+                        this.loadCategories();
+                        break;
+                    case 'my-personas':
+                        this.loadMyPersonas();
+                        break;
+                }
+            }
+
+            loadCategories() {
+                const tabsContainer = document.getElementById('categoriesTabs');
+                tabsContainer.innerHTML = '';
+                
+                const allTab = document.createElement('div');
+                allTab.className = 'nav-tab active';
+                allTab.textContent = this.currentLang === 'ar' ? 'الكل' : 
+                                   this.currentLang === 'es' ? 'Todo' : 'All';
+                allTab.onclick = () => this.filterByCategory('all');
+                tabsContainer.appendChild(allTab);
+                
+                Object.entries(this.categories).forEach(([key, cat]) => {
+                    const tab = document.createElement('div');
+                    tab.className = 'nav-tab';
+                    tab.textContent = `${cat.icon} ${cat.name}`;
+                    tab.onclick = () => this.filterByCategory(key);
+                    tabsContainer.appendChild(tab);
+                });
+                
+                this.filterByCategory('all');
+            }
+
+            filterByCategory(category) {
+                this.currentCategory = category;
+                
+                document.querySelectorAll('#categoriesTabs .nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                const container = document.getElementById('categoryPersonas');
+                const allPersonas = [...this.popularPersonas, ...this.myPersonas];
+                const filteredPersonas = category === 'all' ? 
+                    allPersonas : 
+                    allPersonas.filter(p => p.category === category);
+                
+                container.innerHTML = '';
+                filteredPersonas.forEach((persona, index) => {
+                    const card = this.createEnhancedPersonaCard(persona, this.popularPersonas.includes(persona), this.myPersonas.includes(persona));
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    container.appendChild(card);
+                });
+            }
+
+            loadMyPersonas() {
+                const container = document.getElementById('myPersonas');
+                container.innerHTML = '';
+                
+                if (this.myPersonas.length === 0) {
+                    const emptyText = {
+                        ar: { title: 'لا توجد شخصيات مخصصة بعد', desc: 'اضغط على "إنشاء جديد" لصنع شخصيتك الأولى' },
+                        en: { title: 'No custom personalities yet', desc: 'Click "Create New" to make your first one' },
+                        es: { title: 'No hay personalidades personalizadas aún', desc: 'Haz clic en "Crear Nueva" para hacer tu primera' }
+                    };
+                    const text = emptyText[this.currentLang] || emptyText.en;
+                    
+                    container.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 80px; color: var(--text-muted);">
+                            <div style="font-size: 64px; margin-bottom: 24px; opacity: 0.7;">📝</div>
+                            <h3 style="margin-bottom: 12px; font-size: 20px;">${text.title}</h3>
+                            <p style="font-size: 16px;">${text.desc}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.myPersonas.forEach((persona, index) => {
+                    const card = this.createEnhancedPersonaCard(persona, false, true);
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    container.appendChild(card);
+                });
+            }
+
+            selectPersona(persona) {
+                document.querySelectorAll('.persona-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                event.currentTarget.classList.add('selected');
+                
+                this.selectedPersona = persona;
+                
+                const continueBtn = document.getElementById('continueBtn');
+                continueBtn.style.opacity = '1';
+                continueBtn.style.pointerEvents = 'all';
+                continueBtn.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    continueBtn.style.transform = 'scale(1)';
+                }, 200);
+            }
+
+            openCreateModal() {
+                this.editingPersonaId = null;
+                document.getElementById('createModal').style.display = 'flex';
+            }
+
+            closeCreateModal() {
+                document.getElementById('createModal').style.display = 'none';
+                document.getElementById('createPersonaForm').reset();
+                document.querySelectorAll('.emoji-option').forEach(emoji => {
+                    emoji.classList.remove('selected');
+                });
+                document.querySelectorAll('.error-message').forEach(error => {
+                    error.classList.add('hidden');
+                });
+                this.editingPersonaId = null;
+            }
+
+            selectEmoji(emoji) {
+                document.querySelectorAll('.emoji-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                event.target.classList.add('selected');
+            }
+
+            async createPersona() {
+                const name = document.getElementById('personaName').value.trim();
+                const selectedEmoji = document.querySelector('.emoji-option.selected');
+                const category = document.getElementById('personaCategory').value;
+                const description = document.getElementById('personaDescription').value.trim();
+                const personality = document.getElementById('personaPersonality').value.trim();
+                const expertise = document.getElementById('personaExpertise').value.trim();
+                const languageStyle = document.getElementById('personaLanguageStyle').value;
+                
+                document.querySelectorAll('.error-message').forEach(error => {
+                    error.classList.add('hidden');
+                });
+
+                if (!name || !selectedEmoji || !description || !personality) {
+                    const errorMsg = {
+                        ar: 'يرجى ملء جميع الحقول المطلوبة',
+                        en: 'Please fill in all required fields',
+                        es: 'Por favor complete todos los campos requeridos'
+                    };
+                    this.showNotification(errorMsg[this.currentLang] || errorMsg.en, 'error');
+                    return;
+                }
+
+                const allPersonas = [...this.popularPersonas, ...this.myPersonas];
+                const isDuplicate = this.editingPersonaId ? 
+                    allPersonas.some(p => p.name.toLowerCase() === name.toLowerCase() && p.id !== this.editingPersonaId) :
+                    allPersonas.some(p => p.name.toLowerCase() === name.toLowerCase());
+                
+                if (isDuplicate) {
+                    const errorMsg = {
+                        ar: 'اسم الشخصية موجود بالفعل، يرجى اختيار اسم آخر',
+                        en: 'Persona name already exists, please choose another name',
+                        es: 'El nombre de la personalidad ya existe, por favor elija otro nombre'
+                    };
+                    document.getElementById('nameError').textContent = errorMsg[this.currentLang] || errorMsg.en;
+                    document.getElementById('nameError').classList.remove('hidden');
+                    return;
+                }
+                
+                const personaData = {
+                    id: this.editingPersonaId || 'custom_' + Date.now(),
+                    name: name,
+                    icon: selectedEmoji.dataset.emoji,
+                    category: category,
+                    description: description,
+                    personality: personality,
+                    expertise: expertise,
+                    languageStyle: languageStyle,
+                    systemPrompt: this.generateSystemPrompt(name, personality, expertise, languageStyle),
+                    tags: [this.categories[category]?.name || category],
+                    createdAt: new Date().toISOString(),
+                    createdBy: this.currentLang === 'ar' ? 'أنت' : this.currentLang === 'es' ? 'Tú' : 'You',
+                    language: this.currentLang
+                };
+
+                if (this.editingPersonaId) {
+                    const index = this.myPersonas.findIndex(p => p.id === this.editingPersonaId);
+                    if (index !== -1) {
+                        this.myPersonas[index] = personaData;
+                    }
+                } else {
+                    this.myPersonas.push(personaData);
+                }
+                
+                localStorage.setItem('myPersonas', JSON.stringify(this.myPersonas));
+                
+                this.closeCreateModal();
+                this.switchSection('my-personas');
+                
+                const successMsg = {
+                    ar: this.editingPersonaId ? 'تم تحديث الشخصية بنجاح!' : 'تم إنشاء الشخصية بنجاح!',
+                    en: this.editingPersonaId ? 'Persona updated successfully!' : 'Persona created successfully!',
+                    es: this.editingPersonaId ? '¡Personalidad actualizada exitosamente!' : '¡Personalidad creada exitosamente!'
+                };
+                this.showNotification(successMsg[this.currentLang] || successMsg.en, 'success');
+            }
+
+            generateSystemPrompt(name, personality, expertise, languageStyle) {
+                const langMap = {
+                    ar: {
+                        formal: 'بأسلوب رسمي ومهذب',
+                        casual: 'بأسلوب عادي وودود',
+                        slang: 'بأسلوب شبابي وعامي',
+                        romantic: 'بأسلوب رومانسي وحنون',
+                        funny: 'بأسلوب مرح ومضحك',
+                        wise: 'بأسلوب حكيم ومتأمل',
+                        base: `أنت ${name}، شخصية AI مخصصة. شخصيتك: ${personality}. ${expertise ? `تخصصك: ${expertise}.` : ''} تتكلم {style}. احرص على الاحتفاظ بشخصيتك المميزة في جميع المحادثات وكن مفيداً ومتفاعلاً.`
+                    },
+                    en: {
+                        formal: 'in a formal and polite manner',
+                        casual: 'in a casual and friendly manner',
+                        slang: 'in a youthful and colloquial manner',
+                        romantic: 'in a romantic and tender manner',
+                        funny: 'in a cheerful and humorous manner',
+                        wise: 'in a wise and thoughtful manner',
+                        base: `You are ${name}, a custom AI personality. Your personality: ${personality}. ${expertise ? `Your expertise: ${expertise}.` : ''} You speak {style}. Always maintain your unique personality in all conversations and be helpful and engaging.`
+                    }
+                };
+                
+                const lang = langMap[this.currentLang] || langMap.en;
+                const style = lang[languageStyle] || lang.casual;
+                
+                return lang.base.replace('{style}', style);
+            }
+
+            setupChatInterface() {
+                if (!this.selectedPersona) return;
+                
+                const persona = this.selectedPersona;
+                
+                document.getElementById('chatPersonaAvatar').textContent = persona.icon;
+                document.getElementById('chatPersonaName').textContent = persona.name;
+                document.getElementById('chatPersonaDesc').textContent = persona.description;
+                
+                document.getElementById('currentPersonaDisplay').innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+                        <div style="width: 50px; height: 50px; background: var(--bg-quaternary); border: 2px solid var(--border-primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">${persona.icon}</div>
+                        <div>
+                            <div style="font-weight: 800; margin-bottom: 3px; font-size: 16px;">${persona.name}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">${this.categories[persona.category]?.name || persona.category}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;">${persona.description}</div>
+                `;
+                
+                document.getElementById('typingAvatar').textContent = persona.icon;
+                
+                this.clearChat();
+                this.addWelcomeMessage();
+            }
+
+            addWelcomeMessage() {
+                if (!this.selectedPersona) return;
+                
+                const persona = this.selectedPersona;
+                const welcomeTemplates = {
+                    ar: `مرحباً! أنا ${persona.name} 😊\n\n${persona.description}\n\nكيف يمكنني مساعدتك اليوم؟`,
+                    en: `Hello! I'm ${persona.name} 😊\n\n${persona.description}\n\nHow can I help you today?`,
+                    es: `¡Hola! Soy ${persona.name} 😊\n\n${persona.description}\n\n¿Cómo puedo ayudarte hoy?`
+                };
+
+                const welcomeMsg = welcomeTemplates[this.currentLang] || welcomeTemplates.en;
+
+                setTimeout(() => {
+                    this.addMessage('assistant', welcomeMsg);
+                }, 800);
+            }
+
+            async sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                if (!this.hasApiKey) {
+                    const errorMsg = {
+                        ar: 'عذراً، احتاج مفتاح API للعمل. يرجى الذهاب للإعدادات.',
+                        en: 'Sorry, I need an API key to work. Please go to settings.',
+                        es: 'Lo siento, necesito una clave API para funcionar. Ve a configuración.'
+                    };
+                    this.addMessage('assistant', errorMsg[this.currentLang] || errorMsg.en);
+                    return;
+                }
+
+                if (!this.selectedPersona) {
+                    const errorMsg = {
+                        ar: 'يرجى اختيار شخصية أولاً.',
+                        en: 'Please select a personality first.',
+                        es: 'Por favor selecciona una personalidad primero.'
+                    };
+                    this.addMessage('assistant', errorMsg[this.currentLang] || errorMsg.en);
+                    return;
+                }
+
+                document.getElementById('sendButton').disabled = true;
+                document.getElementById('emptyChat').style.display = 'none';
+
+                this.addMessage('user', message);
+                input.value = '';
+                input.style.height = 'auto';
+
+                this.showTyping();
+
+                try {
+                    const response = await this.callGeminiAPI(message);
+                    this.hideTyping();
+                    this.addMessage('assistant', response);
+                } catch (error) {
+                    this.hideTyping();
+                    console.error('API Error:', error);
+                    const errorMsg = {
+                        ar: 'عذراً، حدث خطأ في الاتصال. تأكد من مفتاح API.',
+                        en: 'Sorry, connection error occurred. Please check your API key.',
+                        es: 'Lo siento, ocurrió un error de conexión. Verifica tu clave API.'
+                    };
+                    this.addMessage('assistant', errorMsg[this.currentLang] || errorMsg.en);
+                }
+
+                document.getElementById('sendButton').disabled = false;
+            }
+
+            async callGeminiAPI(userMessage) {
+                if (!this.apiKey || !this.selectedPersona) {
+                    throw new Error('Missing API key or persona');
+                }
+
+                const persona = this.selectedPersona;
+                const conversationHistory = this.messages.slice(-10).map(msg => 
+                    `${msg.role === 'user' ? 'User' : persona.name}: ${msg.content}`
+                ).join('\n');
+
+                const promptText = `${persona.systemPrompt}
+
+Previous conversation:
+${conversationHistory}
+
+User: ${userMessage}
+${persona.name}:`;
+
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: promptText
+                                }]
+                            }],
+                            generationConfig: {
+                                temperature: 0.8,
+                                maxOutputTokens: 1000,
+                                topP: 0.95,
+                            },
+                            safetySettings: [
+                                {
+                                    category: "HARM_CATEGORY_HARASSMENT",
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                },
+                                {
+                                    category: "HARM_CATEGORY_HATE_SPEECH", 
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                }
+                            ]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                        return data.candidates[0].content.parts[0].text.trim();
+                    } else {
+                        throw new Error('Invalid response format');
+                    }
+                } catch (error) {
+                    console.error('Gemini API Error:', error);
+                    throw error;
+                }
+            }
+
+            addMessage(role, content) {
+                this.messages.push({ role, content });
+                
+                const chatContainer = document.getElementById('chatContainer');
+                const persona = this.selectedPersona;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${role}`;
+                
+                const avatar = role === 'user' ? 'U' : (persona ? persona.icon : '🤖');
+                
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-avatar ${role}">${avatar}</div>
+                        <div class="message-text">${content}</div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            showTyping() {
+                document.getElementById('typingIndicator').style.display = 'block';
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+
+            scrollToBottom() {
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('chatContainer');
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            }
+
+            autoResize(e) {
+                e.target.style.height = 'auto';
+                e.target.style.height = Math.min(e.target.scrollHeight, 180) + 'px';
+            }
+
+            clearChat() {
+                this.messages = [];
+                const chatContainer = document.getElementById('chatContainer');
+                
+                const messages = chatContainer.querySelectorAll('.message');
+                messages.forEach(msg => msg.remove());
+                
+                document.getElementById('emptyChat').style.display = 'flex';
+            }
+
+            toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('open');
+            }
+
+            backToPersonas() {
+                this.showPersonasScreen();
+            }
+
+            startNewChat() {
+                this.clearChat();
+                this.addWelcomeMessage();
+            }
+
+            showApiSettings() {
+                this.showApiSetupScreen();
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 400);
+                }, 4000);
+            }
+        }
+
+        // Global functions
+        function checkApiKey() {
+            window.nexaAI.checkApiKey();
+        }
+
+        function saveApiKey() {
+            window.nexaAI.saveApiKey();
+        }
+
+        function testApiKey() {
+            window.nexaAI.saveApiKey();
+        }
+
+        function toggleTutorial() {
+            const tutorial = document.getElementById('tutorialSection');
+            tutorial.classList.toggle('show');
+        }
+
+        function startChat() {
+            if (!window.nexaAI.selectedPersona) {
+                const alertMsg = {
+                    ar: 'يرجى اختيار شخصية أولاً',
+                    en: 'Please select a personality first',
+                    es: 'Por favor selecciona una personalidad primero'
+                };
+                alert(alertMsg[window.nexaAI.currentLang] || alertMsg.en);
+                return;
+            }
+            window.nexaAI.showChatApp();
+        }
+
+        function openCreateModal() {
+            window.nexaAI.openCreateModal();
+        }
+
+        function closeCreateModal() {
+            window.nexaAI.closeCreateModal();
+        }
+
+        function createPersona() {
+            window.nexaAI.createPersona();
+        }
+
+        function startNewChat() {
+            window.nexaAI.startNewChat();
+        }
+
+        function backToPersonas() {
+            window.nexaAI.backToPersonas();
+        }
+
+        function showApiSettings() {
+            window.nexaAI.showApiSettings();
+        }
+
+        function toggleSidebar() {
+            window.nexaAI.toggleSidebar();
+        }
+
+        // Initialize the enhanced app
+        document.addEventListener('DOMContentLoaded', () => {
+            window.nexaAI = new EnhancedNexaAI();
+        });
+
+        // Enhanced mobile interactions
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.getElementById('menuBtn');
+            
+            if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && !menuBtn?.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Enhanced responsive behavior
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.getElementById('menuBtn');
+            
+            if (window.innerWidth > 768 && sidebar) {
+                sidebar.classList.remove('open');
+            }
+            
+            if (menuBtn) {
+                menuBtn.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+            }
+        });
+
+        // Enhanced CSS additions for tutorial and styling
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.textContent = `
+                .tutorial-section {
+                    background: var(--bg-tertiary);
+                    border: 2px solid var(--border-secondary);
+                    border-radius: 14px;
+                    padding: 24px;
+                    margin-top: 24px;
+                    display: none;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: all 0.3s ease;
+                }
+
+                .tutorial-section.show {
+                    display: block;
+                    opacity: 1;
+                    transform: translateY(0);
+                    animation: slideDown 0.4s ease;
+                }
+
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .tutorial-toggle {
+                    color: var(--accent-primary);
+                    cursor: pointer;
+                    font-size: 14px;
+                    text-decoration: underline;
+                    margin-top: 12px;
+                    font-weight: 600;
+                    transition: color 0.2s ease;
+                }
+
+                .tutorial-toggle:hover {
+                    color: var(--accent-hover);
+                }
+
+                .tutorial-steps {
+                    list-style: none;
+                    counter-reset: step-counter;
+                }
+
+                .tutorial-steps li {
+                    counter-increment: step-counter;
+                    margin-bottom: 18px;
+                    padding-left: 35px;
+                    position: relative;
+                    line-height: 1.6;
+                }
+
+                .tutorial-steps li::before {
+                    content: counter(step-counter);
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    background: var(--gradient-primary);
+                    color: white;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 12px;
+                    font-weight: 800;
+                    box-shadow: var(--shadow-light);
+                }
+
+                .emoji-option:hover {
+                    background: var(--bg-hover);
+                    transform: scale(1.1);
+                }
+
+                .emoji-option.selected {
+                    border-color: var(--accent-primary);
+                    background: var(--accent-muted);
+                    transform: scale(1.1);
+                    box-shadow: var(--shadow-light);
+                }
+
+                .form-group {
+                    margin-bottom: 24px;
+                }
+
+                .form-label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    font-size: 14px;
+                }
+
+                .message {
+                    opacity: 0;
+                    animation: messageSlideIn 0.5s ease forwards;
+                }
+
+                @media (max-width: 768px) {
+                    .personas-title {
+                        font-size: 32px;
+                    }
+                    
+                    .welcome-title {
+                        font-size: 24px;
+                    }
+                    
+                    .personas-nav {
+                        gap: 12px;
+                    }
+                    
+                    .nav-tab {
+                        padding: 12px 20px;
+                        font-size: 14px;
+                    }
+                    
+                    .message-content {
+                        gap: 16px;
+                    }
+                    
+                    .message-avatar {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 18px;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
