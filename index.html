@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="380x256" href="AiIloon23.png">
-    <title>Aithorix AI - AI Personas Hub</title>
+    <title>Nexa - AI Personas Hub</title>
     <style>
         :root {
             /* Enhanced Theme System */
@@ -1177,7 +1176,7 @@
         }
     </style>
     <style>
-.btn-secondary {
+.btn-secondary1 {
     padding: 12px 25px;
     font-size: 1rem;
     cursor: pointer;
@@ -1188,25 +1187,73 @@
     transition: all 0.3s ease;
 }
 
-.btn-secondary:hover {
+.sec-btn-secondary1:hover {
     background-color: rgba(255, 255, 255, 0.2); /* شفاف عند المرور */
     transform: scale(1.05); /* حركة تكبير بسيطة */
 }
 </style>
-<style>
-/* حجم الزر الافتراضي */
-#aboutBtn {
-    padding: 10px 20px; /* المسافة داخل الزر */
-    font-size: 16px;    /* حجم الخط */
+
+    <style>
+
+.sec-btn {
+    padding: 16px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 6px 20px rgba(220, 53, 69, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Media Query للجوال فقط على هذا الزر */
-@media only screen and (max-width: 768px) {
-    #aboutBtn {
-        padding: 3px 8px;  /* يقلل حجم البادينغ */
-        font-size: 8px;    /* يصغر حجم الخط */
+.sec-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.sec-btn:hover::before {
+    left: 100%;
+}
+
+.sec-btn:hover {
+    background: linear-gradient(135deg, #e74c3c, #dc3545);
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 
+        0 12px 30px rgba(220, 53, 69, 0.5),
+        0 0 20px rgba(220, 53, 69, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.sec-btn:active {
+    transform: translateY(-1px) scale(1.05);
+    transition: transform 0.1s ease;
+}
+
+.alert-icon {
+    display: inline-block;
+    animation: alertPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+    0%, 100% { transform: scale(1); }
+    50% { 
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
     }
 }
+            
 </style>
 </head>
 <body>
@@ -1215,9 +1262,9 @@
         <div class="language-selector">
             <button class="lang-btn" data-lang="ar">العربية</button>
             <button class="lang-btn" data-lang="en">English</button>
-<button id="aboutBtn" class="btn btn-secondary" onclick="window.location.href='two.html'">
-    من نحن / About Us
-</button>
+    <button class="btn btn-secondary1" onclick="window.location.href='two.html'">
+        من نحن / About Us
+    </button>
         </div>
 
         <div class="theme-toggle" id="themeToggle"></div>
@@ -1236,6 +1283,9 @@
 
     <!-- API Setup Screen -->
     <div class="api-setup-screen" id="apiSetupScreen">
+                <div class="language-selector">
+<button class="sec-btn" data-lang="sec" onclick="window.location.href='sec.html'">🚨</button>
+        </div>
         <div class="api-setup-container">
             <div style="text-align: center; margin-bottom: 40px;">
                 <h2 class="welcome-title" data-i18n="api.title">إعداد مفتاح Gemini API</h2>
@@ -2863,19 +2913,3 @@ ${persona.name}:`;
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
